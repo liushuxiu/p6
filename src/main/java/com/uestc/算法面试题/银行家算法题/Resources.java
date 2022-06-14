@@ -1,4 +1,4 @@
-package com.uestc.算法面试题;
+package com.uestc.算法面试题.银行家算法题;
 
 public class Resources {
     //可用各资源数量
