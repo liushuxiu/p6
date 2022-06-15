@@ -7,24 +7,18 @@ public class T07_00_sync_wait_notify {
 
     private static CountDownLatch latch = new CountDownLatch(1); // 设置门栓的参数为1，即只有一个门栓
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
 
         final Object o = new Object();
 
         char[] aI = "1234567".toCharArray();
         char[] aC = "ABCDEFG".toCharArray();
 
-        Thread t1 = new Thread(() -> {
-            System.out.println("t1-0");
-            latch.countDown(); // 门栓的数值-1，即打开门
-            System.out.println("t1-1");
-            System.out.println("t1-2");
-
-
+        new Thread(() -> {
             synchronized (o) {
                 for (char c : aI) {
                     System.out.print(c);
-
+                    latch.countDown(); // 门栓的数值-1，即打开门
                     try {
                         o.notify();
                         o.wait();
@@ -34,17 +28,12 @@ public class T07_00_sync_wait_notify {
                 }
                 o.notify();
             }
-        }, "t1");
+        }, "t1").start();
 
-
-        Thread t2 = new Thread(() -> {
+        new Thread(() -> {
             try {
-                System.out.println("t2-0");
                 latch.await(); // 想哪个线程后执行，await()就放在哪个线程里
-                System.out.println("t2-1");
-                System.out.println("t2-2");
-
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             synchronized (o) {
@@ -59,11 +48,6 @@ public class T07_00_sync_wait_notify {
                 }
                 o.notify();
             }
-        }, "t2");
-
-
-        t2.start();
-        t1.start();
-
+        }, "t2").start();
     }
 }
