@@ -16,31 +16,33 @@ public class CarContainer<E extends Runnable> {
 //        consumer.add(container.remove(container.size()));
 //    }
 
-    public void add(E e) {
+    public void add0(E e) {
         container.add(e);
     }
 
-    public void add(Driver<E> producer) {
+    public void add1(Driver<E> producer) {
         container.add(producer.getDrivingCar());
     }
 
-//    public void add(Driver<? extends E> producer) {
-//        container.add(producer.getDrivingCar());
-//    }
+    public void add2(Driver<? extends E> producer) {
+        container.add(producer.getDrivingCar());
+    }
 
 
     public static void main(String[] args) {
         CarContainer<Runnable> container = new CarContainer<Runnable>();
         Buick buick = new Buick();
-        container.add(buick);
+        container.add0(buick);
 
-//        Driver<Buick> driver = new Driver<Buick>();
-//        driver.drive(buick);
-//        container.add(driver);
+        Driver<Runnable> driver1 = new Driver<Runnable>();
+        driver1.drive(buick);
+        container.add1(driver1);
 
-        Driver<Runnable> driver = new Driver<Runnable>();
-        driver.drive(buick);
-        container.add(driver);
+        Driver<Buick> driver2 = new Driver<Buick>();
+        driver2.drive(buick);
+        container.add2(driver2);
+
+
 
 
         Set<Runnable> consumer = new HashSet<Runnable>();
